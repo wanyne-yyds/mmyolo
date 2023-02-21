@@ -72,9 +72,9 @@ def main():
     if args.work_dir is not None:
         # update configs according to CLI args if args.work_dir is not None
         cfg.work_dir = args.work_dir
-    elif cfg.get('work_dir', None) is None:
+    elif cfg.get('work_dirs', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
-        cfg.work_dir = osp.join('./work_dir',
+        cfg.work_dir = osp.join('./work_dirs',
                                 osp.splitext(osp.basename(args.config))[0], '%s'%(time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())))
 
     # enable automatic-mixed-precision training
