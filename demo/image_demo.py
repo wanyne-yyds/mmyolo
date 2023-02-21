@@ -9,7 +9,7 @@ from mmengine.utils import ProgressBar, path
 
 from mmyolo.registry import VISUALIZERS
 from mmyolo.utils import register_all_modules, switch_to_deploy
-from mmyolo.utils.labelme_utils import LabelmeFormat
+from mmyolo.utils.labelme_utils import LabelmeFormat, MetricsFormat
 from mmyolo.utils.misc import get_file_list, show_data_classes
 
 
@@ -40,6 +40,10 @@ def parse_args():
         '--to-labelme',
         action='store_true',
         help='Output labelme style label file')
+    parser.add_argument(
+        '--to-metrics-format',
+        action='store_true',
+        help='Output object style label file')
     args = parser.parse_args()
     return args
 
@@ -75,6 +79,9 @@ def main():
 
     # ready for labelme format if it is needed
     to_label_format = LabelmeFormat(classes=dataset_classes)
+
+    # ready for metrics format if it is needed
+    to_metrics_format = MetricsFormat(classes=dataset_classes)
 
     # check class name
     if args.class_name is not None:
@@ -112,6 +119,12 @@ def main():
                 os.path.splitext(out_file)[-1], '.json')
             to_label_format(pred_instances, result.metainfo, out_file,
                             args.class_name)
+            continue
+
+        if args.to_metrics_format:
+            out_file = out_file.replace(
+                os.path.splitext(out_file)[-1], '.txt')
+            to_metrics_format(pred_instances, result.metainfo, out_file)
             continue
 
         visualizer.add_datasample(

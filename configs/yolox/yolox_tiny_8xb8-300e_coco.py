@@ -2,6 +2,7 @@ _base_ = './yolox_s_8xb8-300e_coco.py'
 
 deepen_factor = 0.33
 widen_factor = 0.375
+img_scale = (416, 416)  # width, height
 
 # model settings
 model = dict(
@@ -16,7 +17,6 @@ model = dict(
     neck=dict(deepen_factor=deepen_factor, widen_factor=widen_factor),
     bbox_head=dict(head_module=dict(widen_factor=widen_factor)))
 
-img_scale = _base_.img_scale
 pre_transform = _base_.pre_transform
 
 train_pipeline_stage1 = [

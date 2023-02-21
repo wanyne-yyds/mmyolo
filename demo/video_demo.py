@@ -14,6 +14,9 @@ python demo/video_demo.py \
 import argparse
 
 import cv2
+import os
+import os.path as osp
+from pathlib import Path
 import mmcv
 from mmcv.transforms import Compose
 from mmdet.apis import inference_detector, init_detector
@@ -21,6 +24,8 @@ from mmengine.utils import track_iter_progress
 
 from mmyolo.registry import VISUALIZERS
 from mmyolo.utils import register_all_modules
+
+from mmengine.utils import ProgressBar, path
 
 
 def parse_args():
@@ -65,35 +70,45 @@ def main():
     # the dataset_meta is loaded from the checkpoint and
     # then pass to the model in init_detector
     visualizer.dataset_meta = model.dataset_meta
+    
+    if osp.isfile(args.video):
+        video_file = list(args.video)
+    elif osp.isdir(args.video):
+        video_file = Path(args.video).rglob('*.*')
 
-    video_reader = mmcv.VideoReader(args.video)
-    video_writer = None
-    if args.out:
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        video_writer = cv2.VideoWriter(
-            args.out, fourcc, video_reader.fps,
-            (video_reader.width, video_reader.height))
-
-    for frame in track_iter_progress(video_reader):
-        result = inference_detector(model, frame, test_pipeline=test_pipeline)
-        visualizer.add_datasample(
-            name='video',
-            image=frame,
-            data_sample=result,
-            draw_gt=False,
-            show=False,
-            pred_score_thr=args.score_thr)
-        frame = visualizer.get_image()
-
-        if args.show:
-            cv2.namedWindow('video', 0)
-            mmcv.imshow(frame, 'video', args.wait_time)
+    for video_name in video_file:
+        video_reader = mmcv.VideoReader(str(video_name))
+        video_writer = None
         if args.out:
-            video_writer.write(frame)
+            filename = video_name.name
+            if not osp.exists(args.out):
+                os.makedirs(args.out, exist_ok=True)
+            outVideoName = osp.join(args.out, filename)
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            video_writer = cv2.VideoWriter(
+                outVideoName, fourcc, video_reader.fps,
+                (video_reader.width, video_reader.height))
 
-    if video_writer:
-        video_writer.release()
-    cv2.destroyAllWindows()
+        for frame in track_iter_progress(video_reader):
+            result = inference_detector(model, frame, test_pipeline=test_pipeline)
+            visualizer.add_datasample(
+                name='video',
+                image=frame,
+                data_sample=result,
+                draw_gt=False,
+                show=False,
+                pred_score_thr=args.score_thr)
+            frame = visualizer.get_image()
+
+            if args.show:
+                cv2.namedWindow('video', 0)
+                mmcv.imshow(frame, 'video', args.wait_time)
+            if args.out:
+                video_writer.write(frame)
+
+        if video_writer:
+            video_writer.release()
+        # cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':

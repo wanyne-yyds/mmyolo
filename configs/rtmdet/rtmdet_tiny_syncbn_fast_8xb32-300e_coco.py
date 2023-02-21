@@ -42,7 +42,7 @@ train_pipeline = [
         type='YOLOv5MixUp',
         use_cached=True,
         random_pop=False,
-        max_cached_images=10,
+        max_cached_images=20,
         prob=0.5),
     dict(type='mmdet.PackDetInputs')
 ]

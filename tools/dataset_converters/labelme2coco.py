@@ -43,7 +43,6 @@ from typing import Optional
 
 import numpy as np
 from mmengine import track_iter_progress
-
 from mmyolo.utils.misc import IMG_EXTENSIONS
 
 
@@ -97,7 +96,7 @@ def format_coco_annotations(points: list, image_id: int, annotations_id: int,
 def parse_labelme_to_coco(
         image_dir: str,
         labels_root: str,
-        all_classes_id: Optional[dict] = None) -> (dict, dict):
+        all_classes_id: Optional[dict] = None):
     """Gen COCO json format label from labelme format label.
 
     Args:

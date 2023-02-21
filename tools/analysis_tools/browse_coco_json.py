@@ -14,7 +14,7 @@ def show_coco_json(args):
         coco = COCO(osp.join(args.data_root, args.ann_file))
     else:
         coco = COCO(args.ann_file)
-    print(f'Total number of images：{len(coco.getImgIds())}')
+    print(f'Total number of images: {len(coco.getImgIds())}')
     categories = coco.loadCats(coco.getCatIds())
     category_names = [category['name'] for category in categories]
     print(f'Total number of Categories : {len(category_names)}')
@@ -53,13 +53,12 @@ def show_coco_json(args):
             coco.showAnns(annotations)
         else:
             show_bbox_only(coco, annotations)
-
         if args.wait_time == 0:
             plt.show()
         else:
             plt.show(block=False)
             plt.pause(args.wait_time)
-
+        plt.savefig('browse_coco_json.png')
         plt.close()
 
 

@@ -59,7 +59,7 @@ class BatchShapePolicy:
 
     def __init__(self,
                  batch_size: int = 32,
-                 img_size: int = 640,
+                 img_size: list = [640, 352],
                  size_divisor: int = 32,
                  extra_pad_ratio: float = 0.5):
         self.batch_size = batch_size
@@ -96,9 +96,17 @@ class BatchShapePolicy:
             elif min_index > 1:
                 shapes[i] = [1, 1 / min_index]
 
-        batch_shapes = np.ceil(
-            np.array(shapes) * self.img_size / self.size_divisor +
+        # batch_shapes = np.ceil(
+        #     np.array(shapes) * self.img_size / self.size_divisor +
+        #     self.extra_pad_ratio).astype(np.int64) * self.size_divisor
+
+        batch_shapes0 = np.ceil(
+            np.array(shapes)[:, 0] * self.img_size[0] / self.size_divisor +
             self.extra_pad_ratio).astype(np.int64) * self.size_divisor
+        batch_shapes1 = np.ceil(
+            np.array(shapes)[:, 1] * self.img_size[1] / self.size_divisor +
+            self.extra_pad_ratio).astype(np.int64) * self.size_divisor
+        batch_shapes = np.concatenate((batch_shapes0[:, np.newaxis], batch_shapes1[:, np.newaxis]),axis=1)
 
         for i, data_info in enumerate(data_list):
             data_info['batch_shape'] = batch_shapes[batch_index[i]]

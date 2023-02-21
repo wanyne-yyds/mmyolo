@@ -9,7 +9,6 @@ import numpy as np
 from mmengine.config import Config
 from mmengine.utils import ProgressBar
 from prettytable import PrettyTable
-
 from mmyolo.registry import DATASETS
 from mmyolo.utils import register_all_modules
 from mmyolo.utils.misc import show_data_classes
@@ -48,7 +47,7 @@ def parse_args():
         help='Dataset analysis function selection.')
     parser.add_argument(
         '--out-dir',
-        default='./dataset_analysis',
+        default='./work_dir/ReadDataset/HOD/analysis',
         type=str,
         help='Output directory of dataset analysis visualization results,'
         ' Save in "./dataset_analysis/" by default')

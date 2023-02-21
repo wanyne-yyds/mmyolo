@@ -22,7 +22,7 @@ warnings.filterwarnings(action='ignore', category=ResourceWarning)
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('config', help='Config file')
-    parser.add_argument('checkpoint', help='Checkpoint file')
+    parser.add_argument('--checkpoint', default=None, help='Checkpoint file')
     parser.add_argument(
         '--model-only', action='store_true', help='Export model only')
     parser.add_argument(

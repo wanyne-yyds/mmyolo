@@ -225,7 +225,7 @@ def main():
         cfg.merge_from_dict(args.cfg_options)
     if cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
-        cfg.work_dir = osp.join('./work_dirs',
+        cfg.work_dir = osp.join('./work_dir',
                                 osp.splitext(osp.basename(args.config))[0])
 
     cfg.log_level = args.log_level

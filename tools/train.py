@@ -2,6 +2,7 @@
 import argparse
 import logging
 import os
+import time
 import os.path as osp
 
 from mmengine.config import Config, DictAction
@@ -73,8 +74,8 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
-        cfg.work_dir = osp.join('./work_dirs',
-                                osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./work_dir',
+                                osp.splitext(osp.basename(args.config))[0], '%s'%(time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())))
 
     # enable automatic-mixed-precision training
     if args.amp is True:

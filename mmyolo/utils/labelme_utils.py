@@ -59,7 +59,7 @@ class LabelmeFormat:
         """
 
         image_path = os.path.abspath(metainfo['img_path'])
-
+        # image_path = '.\\' + os.path.basename(image_path)
         json_info = {
             'version': '5.1.1',
             'flags': {},
@@ -90,3 +90,20 @@ class LabelmeFormat:
 
         with open(output_path, 'w', encoding='utf-8') as f_json:
             json.dump(json_info, f_json, ensure_ascii=False, indent=2)
+
+
+class MetricsFormat:
+    def __init__(self, classes: tuple):
+        super().__init__()
+        self.classes = classes
+
+    def __call__(self, pred_instances: InstanceData, metainfo: dict,
+              output_path: str):
+        with open(output_path,'w+') as ftxt:
+          for pred_instance in pred_instances:
+              pred_bbox = pred_instance.bboxes.cpu().numpy().tolist()[0]
+              pred_label = self.classes[pred_instance.labels]
+              pre_scores = pred_instance.scores.cpu().numpy()[0]
+              strxy = "%s %.2f "%(pred_label, pre_scores)
+              strxy+=str(int(pred_bbox[0]))+' '+str(int(pred_bbox[1]))+' '+str(int(pred_bbox[2]))+' '+str(int(pred_bbox[3]))
+              ftxt.writelines(strxy+"\n")

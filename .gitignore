@@ -117,6 +117,8 @@ docs/modelzoo_statistics.md
 mmyolo/.mim
 output/
 work_dirs
+work_dir
+mmyolo.egg-info
 yolov5-6.1/
 
 # Pytorch
@@ -124,3 +126,6 @@ yolov5-6.1/
 *.pt
 *.py~
 *.sh~
+
+# ignore file
+demo/*.mp4
