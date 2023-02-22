@@ -2,7 +2,7 @@ import time
 _base_ = '../_base_/default_runtime.py'
 
 # checkpoint = '/mmyolo/code/work_dir/rtmdet_tiny_syncbn_fast_mobilenetv2_10xb128-100e_coco/2023-02-13/best_coco/bbox_mAP_epoch_70.pth'  # noqa
-load_from = '/mmyolo/code/work_dir/rtmdet_tiny_syncbn_fast_mobilenetv2_10xb128-100e_coco_prob/2023-02-20_06-46-08/best_coco/bbox_mAP_epoch_70.pth'
+load_from = '/mmyolo/code/work_dirs/rtmdet_tiny_syncbn_fast_mobilenetv2_10xb128-100e_coco_prob/2023-02-20_06-46-08/best_coco/bbox_mAP_epoch_70.pth'
 resume = False
 
 data_root = '/mmyolo/data/MMYOLO_yoloFromat_2023-02-04/'
@@ -253,7 +253,7 @@ param_scheduler = [
     dict(
         # use cosine lr from 150 to 300 epoch
         type='CosineAnnealingLR',
-        eta_min=base_lr * 0.05,
+        eta_min=base_lr * 0.5,
         begin=max_epochs // 2,
         end=max_epochs,
         T_max=max_epochs // 2,
