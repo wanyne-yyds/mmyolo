@@ -43,7 +43,7 @@ def parse_args():
         'the intermediate images. Defaults to "transformed".')
     parser.add_argument(
         '--out-dir',
-        default='/mmyolo/code/work_dir/ReadDataset/HOD',
+        default='/worksplace/mmyolo/work_dirs/ReadDataset/HOD',
         type=str,
         help='If there is no display interface, you can save it.')
     parser.add_argument('--not-show', default=False, action='store_true')

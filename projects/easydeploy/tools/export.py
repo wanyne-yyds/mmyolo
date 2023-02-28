@@ -83,7 +83,7 @@ def main():
 
     if args.model_only:
         postprocess_cfg = None
-        output_names = None
+        output_names = ["cls8", "cls16", "cls32", "box8", "box16", "box32"]
     else:
         postprocess_cfg = ConfigDict(
             pre_top_k=args.pre_topk,

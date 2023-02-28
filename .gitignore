@@ -117,15 +117,18 @@ docs/modelzoo_statistics.md
 mmyolo/.mim
 output/
 work_dirs
-work_dir
 mmyolo.egg-info
 yolov5-6.1/
+demo/*.mp4
+demo/*.sh
+projects/easydeploy/tools/*.sh
+projects/easydeploy/ncnn/model
+projects/easydeploy/ncnn/build
+projects/easydeploy/ncnn/*.sh
+projects/easydeploy/ncnn/HOD-RTMDET
 
 # Pytorch
 *.pth
 *.pt
 *.py~
 *.sh~
-
-# ignore file
-demo/*.mp4

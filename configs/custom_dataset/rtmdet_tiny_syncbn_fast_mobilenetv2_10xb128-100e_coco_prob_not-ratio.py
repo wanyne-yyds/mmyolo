@@ -1,11 +1,11 @@
 import time
 _base_ = '../_base_/default_runtime.py'
 
-# checkpoint = '/mmyolo/code/work_dir/rtmdet_tiny_syncbn_fast_mobilenetv2_10xb128-100e_coco/2023-02-13/best_coco/bbox_mAP_epoch_70.pth'  # noqa
+# checkpoint = ''  # noqa
 load_from = '/worksplace/mmyolo/work_dirs/rtmdet_tiny_syncbn_fast_mobilenetv2_10xb128-100e_coco_prob/2023-02-20_06-46-08/best_coco/bbox_mAP_epoch_70.pth'
 resume = False
 
-data_root = '/worksplace/data/MMYOLO_yoloFromat_2023-02-13/'
+data_root = '/worksplace/data/MMYOLO_yoloFromat_2023-02-04/'
 dataset_type = 'YOLOv5CocoDataset'
 
 class_name = ('safety_belt','not_safety_belt',
@@ -19,16 +19,16 @@ metainfo = dict(
              (220, 20, 160), (220, 20, 160), (220, 20, 160)]  # 画图时候的颜色，随便设置即可
 )
 
-img_scale = (640, 352)  # width, height
+img_scale = (640, 320)  # width, height
 deepen_factor = 0.33
 widen_factor = 0.50
-max_epochs = 100
+max_epochs = 160
 stage2_num_epochs = 5
 interval = 10
 
 train_batch_size_per_gpu = 128
 train_num_workers = 10
-val_batch_size_per_gpu = 32
+val_batch_size_per_gpu = 128
 val_num_workers = 10
 # persistent_workers must be False if num_workers is 0.
 persistent_workers = True
@@ -131,7 +131,7 @@ with_mosiac_pipeline = [
     scale=(img_scale[0] * 2, img_scale[1] * 2),
     ratio_range=(0.5, 2.0),
     resize_type='mmdet.Resize',
-    keep_ratio=True),
+    keep_ratio=False),
 ]
 
 without_mosaic_pipeline = [
@@ -141,7 +141,7 @@ without_mosaic_pipeline = [
     scale=(img_scale[0] * 2, img_scale[1] * 2),
     ratio_range=(0.5, 2.0),
     resize_type='mmdet.Resize',
-    keep_ratio=True)
+    keep_ratio=False)
 ]
 
 # Because the border parameter is inconsistent when
@@ -168,7 +168,7 @@ train_pipeline_stage2 = [
         scale=img_scale,
         ratio_range=(0.1, 2.0),
         resize_type='mmdet.Resize',
-        keep_ratio=True),
+        keep_ratio=False),
     dict(type='mmdet.RandomCrop', crop_size=img_scale),
     dict(type='mmdet.YOLOXHSVRandomAug'),
     dict(type='mmdet.RandomFlip', prob=0.5),
@@ -178,7 +178,8 @@ train_pipeline_stage2 = [
 
 test_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=_base_.file_client_args),
-    dict(type='YOLOv5KeepRatioResize', scale=img_scale),
+    dict(type='Resize', scale=img_scale),
+    # dict(type='YOLOv5KeepRatioResize', scale=img_scale),
     dict(
         type='LetterResize',
         scale=img_scale,
@@ -221,8 +222,10 @@ val_dataloader = dict(
         ann_file='annotations/val.json',
         data_prefix=dict(img='images/'),
         test_mode=True,
-        batch_shapes_cfg=batch_shapes_cfg,
-        pipeline=test_pipeline))
+        pipeline=test_pipeline,
+        batch_shapes_cfg=None))
+
+        # batch_shapes_cfg=batch_shapes_cfg,
 
 test_dataloader = val_dataloader
 
@@ -306,5 +309,5 @@ test_cfg = dict(type='TestLoop')
 
 visualizer = dict(vis_backends=[dict(type='LocalVisBackend'), 
                                 dict(type='WandbVisBackend', init_kwargs={'project': "MMYOLO",
-                                    'name': "rtmdet-mobilenetv2-nano_prob%s"%(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
+                                    'name': "rtmdet-mobilenetv2-nano_prob_not-ratio%s"%(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
                                     })]) # WandB中的项目名称   

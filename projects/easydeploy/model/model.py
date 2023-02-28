@@ -147,4 +147,8 @@ class DeployModel(nn.Module):
         if self.with_postprocess:
             return self.pred_by_feat(*neck_outputs)
         else:
-            return neck_outputs
+            add_sigmoid = list()
+            for cls_block in neck_outputs[0]:
+                add_sigmoid.append(cls_block.sigmoid())
+            new_neck_outputs = (tuple(add_sigmoid), neck_outputs[1])
+            return new_neck_outputs
