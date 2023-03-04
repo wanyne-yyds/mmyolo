@@ -28,7 +28,7 @@ interval = 10
 
 train_batch_size_per_gpu = 128
 train_num_workers = 10
-val_batch_size_per_gpu = 128
+val_batch_size_per_gpu = 32
 val_num_workers = 10
 # persistent_workers must be False if num_workers is 0.
 persistent_workers = True

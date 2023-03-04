@@ -47,7 +47,7 @@ def parse_args():
         help='Dataset analysis function selection.')
     parser.add_argument(
         '--out-dir',
-        default='./work_dir/ReadDataset/HOD/analysis',
+        default='./work_dirs/ReadDataset/HOD/analysis/BSD-coco',
         type=str,
         help='Output directory of dataset analysis visualization results,'
         ' Save in "./dataset_analysis/" by default')
