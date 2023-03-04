@@ -118,6 +118,7 @@ mmyolo/.mim
 output/
 work_dirs
 yolov5-6.1/
+projects/easydeploy/ncnn
 
 # Pytorch
 *.pth
